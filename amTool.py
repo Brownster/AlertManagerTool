@@ -29,6 +29,39 @@ def create_silence(instance_names, silence_data):
         responses[instance_name] = response.json()
     return responses
 
+def display_silences():
+    # Create the GUI
+    silence_window = Toplevel()
+    silence_window.title("Silences")
+
+    # Create a text widget to display the silences
+    silence_text = Text(silence_window, width=80, height=30)
+    silence_text.pack()
+
+    # Loop over each Prometheus instance
+    for instance_name, prometheus_url in PROMETHEUS_URLS.items():
+        # Retrieve the active and expired silences for this instance
+        active_url = f"{prometheus_url}/silences?active=true"
+        expired_url = f"{prometheus_url}/silences?active=false"
+        active_response = requests.get(active_url)
+        expired_response = requests.get(expired_url)
+        active_response.raise_for_status()
+        expired_response.raise_for_status()
+
+        # Parse the JSON response for the active and expired silences
+        active_silences = active_response.json()["data"]
+        expired_silences = expired_response.json()["data"]
+
+        # Add the active and expired silences to the text widget
+        silence_text.insert(END, f"Prometheus instance: {instance_name}\n\nActive silences:\n")
+        for silence in active_silences:
+            silence_text.insert(END, json.dumps(silence, indent=4) + "\n\n")
+        silence_text.insert(END, "Expired silences:\n")
+        for silence in expired_silences:
+            silence_text.insert(END, json.dumps(silence, indent=4) + "\n\n")
+
+
+
 # Define the main function to handle user input and create a silence
 def main():
     # Create the GUI
@@ -53,6 +86,9 @@ def main():
     # Create a send button
     send_button = Button(root, text="Send Silence", command=lambda: create_silence(instance_names_var.get().split(","), silence_data_entry.get()))
 
+    # Create a display silences button
+    display_button = Button(root, text="Display Silences", command=display_silences)
+
     # Pack the GUI elements
     pre_created_silence_menu.pack()
     silence_data_label.pack()
@@ -60,9 +96,9 @@ def main():
     instance_names_label.pack()
     instance_names_menu.pack()
     send_button.pack()
+    display_button.pack()
 
-    # Start the GUI main loop
-    root.mainloop()
+# Start the GUI main loop
 
 # Run the main function when the script is executed
 if __name__ == "__main__":
