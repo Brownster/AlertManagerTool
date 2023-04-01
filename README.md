@@ -52,6 +52,6 @@ Contributions are welcome! If you find a bug or want to add a feature, please op
 
 ## Credits
 
-This application was created by [Your Name](https://github.com/your-username).
+This application was created by ... (https://github.com/brownster).
 
 This README.md file provides an overview of the project, lists the features and requirements, explains how to use the application, and includes information about the license, contributions, and credits. You can customize this file to fit your specific project.
