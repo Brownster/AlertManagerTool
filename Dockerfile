@@ -33,7 +33,7 @@ COPY frontend/fallback-build /app/frontend/fallback-build
 RUN mkdir -p /app/frontend/build
 # Use a shell script to conditionally copy the build files
 RUN if [ -d /app/frontend/build ]; then echo "Using frontend build"; else cp -r /app/frontend/fallback-build/* /app/frontend/build/; fi
-COPY --from=frontend-build /app/frontend/build /app/frontend/build/ 2>/dev/null || true
+COPY --from=frontend-build /app/frontend/build /app/frontend/build/ || true
 
 # Create non-root user for security
 RUN addgroup --system app && \
