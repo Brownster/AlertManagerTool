@@ -69,3 +69,12 @@ jobs:
       - name: Display container size
         run: |
           docker images sm3-alertmanager:latest || echo "No image created"
+      - name: Tag image for GHCR
+        run: |
+          docker tag sm3-alertmanager:latest ghcr.io/${{ github.repository_owner }}/sm3-alertmanager:latest
+      - name: Log in to GitHub Container Registry
+        env:
+          GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
+        run: echo "$GHCR_TOKEN" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
+      - name: Push image to GHCR
+        run: docker push ghcr.io/${{ github.repository_owner }}/sm3-alertmanager:latest
