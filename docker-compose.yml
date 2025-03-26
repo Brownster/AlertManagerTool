@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  alertmanager-proxy:
+    build:
+      context: .
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_ENV=production
+      # Add any environment variables needed for configuration here
+    restart: unless-stopped
+    # If you want to customize Alertmanager instances via environment
+    # you can use environment variables and modify app.py to read them

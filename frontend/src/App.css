@@ -1,0 +1,13 @@
+.App {
+  text-align: center;
+}
+
+.MuiDrawer-paper {
+  width: 240px;
+}
+
+@media (max-width: 600px) {
+  .MuiDrawer-paper {
+    width: 200px;
+  }
+}
