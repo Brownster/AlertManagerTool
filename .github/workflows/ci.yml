@@ -60,6 +60,12 @@ jobs:
     if: github.event_name != 'pull_request'
     steps:
       - uses: actions/checkout@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
       - name: Build Docker image
         run: |
-          docker build -t sm3-alertmanager:latest . || echo "Docker build failed but continuing workflow"
+          # Disable buildkit for better error messages
+          DOCKER_BUILDKIT=0 docker build -t sm3-alertmanager:latest . || echo "Docker build failed but continuing workflow"
+      - name: Display container size
+        run: |
+          docker images sm3-alertmanager:latest || echo "No image created"
